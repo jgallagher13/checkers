@@ -65,7 +65,7 @@ font-family: 'Star Wars', sans-serif;
 
 ## Pseudocode
 - Constants
-
+    - PLAYER_LOOKUP
 - State variables
     - game board - 1 array of 8 arrays
     - turn - -1 || 1
@@ -85,7 +85,7 @@ font-family: 'Star Wars', sans-serif;
     - Render changes to the DOM
         - render the board 
         - render the tokens on their proper side
-        - render the message (Jedi's turn)
+        - render the message
         - do not render the play again button
     - Wait for interaction
 
@@ -106,8 +106,7 @@ font-family: 'Star Wars', sans-serif;
     - re-render the board
 
 - Check for a winner
-    - check if a player does not have any visible tokens
-    - check if a player is not able to move
+    - check if a player does not have any visible tokens (the loser) and set the other player as the winner
 
 - Check if a token is a king
     - check if a player has reached the last array opposite them
