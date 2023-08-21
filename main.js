@@ -14,7 +14,6 @@ let winner
 const messageEl = document.querySelector('h3')
 const playBtn = document.getElementById('playBtn')
 const forfeitBtn = document.getElementById('forfeitBtn')
-//const spaces = document.getElementById('board')
 const spaces = document.querySelector('#board')
 const spacesArr = [...document.querySelectorAll('#board > div')]
 
@@ -46,40 +45,55 @@ const checkMove = (targetOld) => {
     positionArr.splice(1, 1)
     let colIdx = positionArr[0]
     let rowIdx = positionArr[1]
-    console.log(rowIdx)
-    console.log(typeof rowIdx)
-    parseInt(rowIdx, 10)
-    console.log(typeof rowIdx)
-
-    let NEOffsetCol = colIdx + 1
-    let NEOffsetRow = rowIdx + 1
-    console.log(NEOffsetRow)
-
-    let NWOffsetCol = colIdx += 1
-    let NWOffsetRow = rowIdx -= 1
-
-    let NEOffsetId = `c${NEOffsetCol}r${NEOffsetRow}`
-    let NWOffsetId = `c${NWOffsetCol}r${NWOffsetRow}`
-    let possibleNEcell = document.getElementById(NEOffsetId)
-    let possibleNWcell = document.getElementById(NWOffsetId)
-    console.log(possibleNEcell)
-    possibleNEcell.style.backgroundColor = 'gold'
-    possibleNWcell.style.backgroundColor = 'gold'
-    let possibilityArr = [possibleNEcell, possibleNWcell]
-   return possibilityArr
+    let parsedColIdx = parseInt(colIdx, 10) 
+    let parsedRowIdx = parseInt(rowIdx, 10)
+    
+    if(PLAYER_LOOKUP[turn] === 'rebels'){
+        let NEOffsetCol = parsedColIdx + 1
+        let NEOffsetRow = parsedRowIdx + 1
+        
+    
+        let NWOffsetCol = parsedColIdx - 1
+        let NWOffsetRow = parsedRowIdx + 1
+    
+        let NEOffsetId = `c${NEOffsetCol}r${NEOffsetRow}`
+        let NWOffsetId = `c${NWOffsetCol}r${NWOffsetRow}`
+        let possibleNEcell = document.getElementById(NEOffsetId)
+        let possibleNWcell = document.getElementById(NWOffsetId)
+        possibleNEcell.style.backgroundColor = 'gold'
+        possibleNWcell.style.backgroundColor = 'gold'
+        let possibilityArr = [possibleNEcell, possibleNWcell]
+       return possibilityArr
+    } else if (PLAYER_LOOKUP[turn] === 'empire') {
+        let NEOffsetCol = parsedColIdx - 1
+        let NEOffsetRow = parsedRowIdx - 1
+        
+    
+        let NWOffsetCol = parsedColIdx + 1
+        let NWOffsetRow = parsedRowIdx - 1
+    
+        let NEOffsetId = `c${NEOffsetCol}r${NEOffsetRow}`
+        let NWOffsetId = `c${NWOffsetCol}r${NWOffsetRow}`
+        let possibleNEcell = document.getElementById(NEOffsetId)
+        let possibleNWcell = document.getElementById(NWOffsetId)
+        possibleNEcell.style.backgroundColor = 'gold'
+        possibleNWcell.style.backgroundColor = 'gold'
+        let possibilityArr = [possibleNEcell, possibleNWcell]
+       return possibilityArr
+    }
+   
 }
-   //check to see what is in diagnol squares, if it is blank or if there is piece we can jump over, if value === 0 can move checekr, if value is opposite of current player we can jump
+   //if value is opposite of current player we can jump
    
 
 let targetOld = null
-//let currentChecker = null
 const handleMove = (event) => {
     let targetNew = null
     if(targetOld !== null) {
         if(!event.target.classList.contains('empire') || !event.target.classList.contains('rebels')) {
             if(event.target.classList.contains('black') && event.target.firstChild === null){
-                checkMove(targetOld)
-                if (possibilityArr.includes(event.target)) {
+                let possArr = checkMove(targetOld)
+                if (possArr.includes(event.target)) {
                     targetNew = event.target
                     targetNew.appendChild(targetOld).style.borderColor = 'white'
                     targetOld = null
@@ -110,7 +124,9 @@ const getWinner = () => {
 }
 
 const checkKing = () => {
-
+// if class of checekr = playerturn and targetNew parent row = 7, 
+// change design on checker
+// make new checkMove where can go up and down
 }
 
 const forfeit = () => {
