@@ -1,0 +1,81 @@
+* {
+    font-family: 'Star Wars', sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+    color: white;
+    background-color: black;
+    margin-top: 1vmin;
+    margin-bottom: 1vmin;
+    margin: 0;
+}
+
+header {
+    font-size: 7vmin;
+    letter-spacing: 1vmin;
+}
+
+h2 {
+    font-size: 5vmin;
+}
+
+h3 {
+    font-size: 4vmin;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(8, 10vmin);
+    grid-template-rows: repeat(8, 10vmin);
+}
+
+#board>div {
+    border: 0.4vmin solid white
+}
+
+.rebels {
+    background-color: blue;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: solid white;
+    margin: auto;
+    position: relative;
+}
+
+.empire {
+    background-color: red;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: solid white;
+    margin: auto;
+    position: relative;
+    
+}
+
+.white {
+    background-color: white;
+}
+
+.black {
+    background-color: black;
+    text-align: center;
+    display: flex;
+    
+}
+
+#playBtn {
+    margin: 0.5vmin;
+}
+
+#forfeitBtn {
+    margin: 0.5vmin;
+}
+
