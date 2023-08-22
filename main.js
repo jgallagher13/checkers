@@ -63,8 +63,33 @@ const checkMove = (targetOld) => {
         possibleNEcell.style.backgroundColor = 'gold'
         possibleNWcell.style.backgroundColor = 'gold'
         let possibilityArr = [possibleNEcell, possibleNWcell]
-       return possibilityArr
-    } else if (PLAYER_LOOKUP[turn] === 'empire') {
+
+// jump logic- cannot read properties of null- classList line 68- also on next line
+    
+    
+
+    
+           if (possibleNEcell.firstChild !== null  && possibleNEcell.firstChild.classList.contains('empire')) {
+            console.log(possibleNEcell.firstChild.classList)
+           let NEJumpCol = NEOffsetCol + 1
+           let NEJumpRow = NEOffsetRow + 1
+            let NEJumpPosition = `c${NEJumpCol}r${NEJumpRow}`
+            let possibleNEJumpCell = document.getElementById(NEJumpPosition)
+            possibleNEJumpCell.style.backgroundColor = 'gold'
+            possibilityArr.push(possibleNEJumpCell)
+    
+           } else if (possibleNWcell.firstChild !== null && possibleNWcell.firstChild.classList.contains('empire')){
+           let NWJumpCol = NWOffsetCol - 1
+           let NWJumpRow = NWOffsetRow + 1
+           let NWJumpPosition = `c${NWJumpCol}r${NWJumpRow}`
+           let possibleNWJumpCell = document.getElementById(NWJumpPosition)
+           possibleNWJumpCell.style.backgroundColor = 'gold'
+           possibilityArr.push(possibleNWJumpCell)
+          } 
+          
+        return possibilityArr
+        
+} else if (PLAYER_LOOKUP[turn] === 'empire') {
         let NEOffsetCol = parsedColIdx - 1
         let NEOffsetRow = parsedRowIdx - 1
         
@@ -79,12 +104,42 @@ const checkMove = (targetOld) => {
         possibleNEcell.style.backgroundColor = 'gold'
         possibleNWcell.style.backgroundColor = 'gold'
         let possibilityArr = [possibleNEcell, possibleNWcell]
+
+        if (possibleNEcell.firstChild !== null  && possibleNEcell.firstChild.classList.contains('rebels')) {
+           let NEJumpCol = NEOffsetCol - 1
+           let NEJumpRow = NEOffsetRow - 1
+            let NEJumpPosition = `c${NEJumpCol}r${NEJumpRow}`
+            let possibleNEJumpCell = document.getElementById(NEJumpPosition)
+            possibleNEJumpCell.style.backgroundColor = 'gold'
+            possibilityArr.push(possibleNEJumpCell)
+    
+           } else if (possibleNWcell.firstChild !== null && possibleNWcell.firstChild.classList.contains('rebels')){
+           let NWJumpCol = NWOffsetCol + 1
+           let NWJumpRow = NWOffsetRow - 1
+           let NWJumpPosition = `c${NWJumpCol}r${NWJumpRow}`
+           let possibleNWJumpCell = document.getElementById(NWJumpPosition)
+           possibleNWJumpCell.style.backgroundColor = 'gold'
+           possibilityArr.push(possibleNWJumpCell)
+          } 
+
        return possibilityArr
     }
    
 }
-   //if value is opposite of current player we can jump
-   
+const changeToBlack = () => {
+    const blackDivs = document.querySelectorAll('.black')
+    blackDivs.forEach((div) => {
+        div.style.backgroundColor = 'black'
+    })
+
+    
+}
+
+const jumpPlayer = (blackDiv) => {
+    //get child of black div
+    // remove/ destroy that div
+
+}
 
 let targetOld = null
 const handleMove = (event) => {
@@ -95,9 +150,11 @@ const handleMove = (event) => {
                 let possArr = checkMove(targetOld)
                 if (possArr.includes(event.target)) {
                     targetNew = event.target
+                    
                     targetNew.appendChild(targetOld).style.borderColor = 'white'
                     targetOld = null
                     turn *= -1
+                    changeToBlack()
                 }
                
             }
@@ -105,11 +162,13 @@ const handleMove = (event) => {
     }
     if((event.target.classList.contains('empire') && PLAYER_LOOKUP[turn]==='empire') || (event.target.classList.contains('rebels') && PLAYER_LOOKUP[turn]==='rebels')){
         targetOld = event.target
+        checkMove(targetOld)
         targetOld.style.borderColor = 'gold'
         
     } else {
         return
     }
+    
     winner = getWinner()
     render()
 }
@@ -130,6 +189,11 @@ const checkKing = () => {
 }
 
 const forfeit = () => {
+    if (PLAYER_LOOKUP[turn]==='empire') {
+        winner = 1
+    } else if (PLAYER_LOOKUP[turn]==='rebels') {
+        winner = -1
+    }
 
 }
 
