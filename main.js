@@ -72,30 +72,15 @@ const checkMove = (targetOld) => {
             possibleNEJumpCell.style.backgroundColor = 'gold'
             possibilityArr.push(possibleNEJumpCell)
     
-           } else if (possibleNWcell.firstChild !== null && possibleNWcell.firstChild.classList.contains('empire')){
+           } if (possibleNWcell.firstChild !== null && possibleNWcell.firstChild.classList.contains('empire')){
            let NWJumpCol = NWOffsetCol - 1
            let NWJumpRow = NWOffsetRow + 1
            let NWJumpPosition = `c${NWJumpCol}r${NWJumpRow}`
            let possibleNWJumpCell = document.getElementById(NWJumpPosition)
            possibleNWJumpCell.style.backgroundColor = 'gold'
            possibilityArr.push(possibleNWJumpCell)
-           
-          } else if ((possibleNEcell.firstChild !== null  && possibleNEcell.firstChild.classList.contains('empire')) && (possibleNWcell.firstChild !== null && possibleNWcell.firstChild.classList.contains('empire'))) {
-            let NEJumpCol = NEOffsetCol + 1
-            let NEJumpRow = NEOffsetRow + 1
-            let NEJumpPosition = `c${NEJumpCol}r${NEJumpRow}`
-            let possibleNEJumpCell = document.getElementById(NEJumpPosition)
-            possibleNEJumpCell.style.backgroundColor = 'gold'
-            possibilityArr.push(possibleNEJumpCell)
+           }
 
-           let NWJumpCol = NWOffsetCol - 1
-           let NWJumpRow = NWOffsetRow + 1
-           let NWJumpPosition = `c${NWJumpCol}r${NWJumpRow}`
-           let possibleNWJumpCell = document.getElementById(NWJumpPosition)
-           possibleNWJumpCell.style.backgroundColor = 'gold'
-           possibilityArr.push(possibleNWJumpCell)
-          }
-          console.log(possibilityArr)
         return possibilityArr
         
 } else if (PLAYER_LOOKUP[turn] === 'empire') {
@@ -123,7 +108,7 @@ const checkMove = (targetOld) => {
             possibleNEJumpCell.style.backgroundColor = 'gold'
             possibilityArr.push(possibleNEJumpCell)
     
-           } else if (possibleNWcell.firstChild !== null && possibleNWcell.firstChild.classList.contains('rebels')){
+           } if (possibleNWcell.firstChild !== null && possibleNWcell.firstChild.classList.contains('rebels')){
            let NWJumpCol = NWOffsetCol + 1
            let NWJumpRow = NWOffsetRow - 1
            let NWJumpPosition = `c${NWJumpCol}r${NWJumpRow}`
