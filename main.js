@@ -60,15 +60,16 @@ const checkMove = (targetOld) => {
         let NWOffsetId = `c${NWOffsetCol}r${NWOffsetRow}`
         let possibleNEcell = document.getElementById(NEOffsetId)
         let possibleNWcell = document.getElementById(NWOffsetId)
-        possibleNEcell.style.backgroundColor = 'gold'
-        possibleNWcell.style.backgroundColor = 'gold'
-        let possibilityArr = [possibleNEcell, possibleNWcell]
+     
+       possibleNEcell.style.backgroundColor = 'gold'
+       possibleNWcell.style.backgroundColor = 'gold'
+       let possibilityArr = [possibleNEcell, possibleNWcell]
     
            if (possibleNEcell.firstChild !== null  && possibleNEcell.firstChild.classList.contains('empire')) {
            let NEJumpCol = NEOffsetCol + 1
            let NEJumpRow = NEOffsetRow + 1
-            let NEJumpPosition = `c${NEJumpCol}r${NEJumpRow}`
-            let possibleNEJumpCell = document.getElementById(NEJumpPosition)
+           let NEJumpPosition = `c${NEJumpCol}r${NEJumpRow}`
+           let possibleNEJumpCell = document.getElementById(NEJumpPosition)
             possibleNEJumpCell.style.backgroundColor = 'gold'
             possibilityArr.push(possibleNEJumpCell)
     
@@ -168,7 +169,7 @@ const jumpPlayer = (targetOld, targetNew) => {
   let empireTurnNWJumpedCellRow = parsedRowIdxOld - 1
   let empireTurnNWJumpedCellIdx = `c${empireTurnNWJumpedCellCol}r${empireTurnNWJumpedCellRow}`
   let empireTurnNWJumpedCellPosition = document.getElementById(empireTurnNWJumpedCellIdx)
-  console.log(empireTurnNWJumpedCellPosition)
+  
 
   if (PLAYER_LOOKUP[turn]==='rebels') {
     if (parsedColIdxNew === parsedColIdxOld + 2 && parsedRowIdxNew === parsedRowIdxOld + 2) {
@@ -204,7 +205,6 @@ const handleMove = (event) => {
                     turn *= -1
                     changeToBlack()
                 }
-               
             }
         }
     }
@@ -212,19 +212,32 @@ const handleMove = (event) => {
         targetOld = event.target
         checkMove(targetOld)
         targetOld.style.borderColor = 'gold'
-        
-    } else {
-        return
-    }
+    } 
     
-    winner = getWinner()
+    //winner = getWinner()
     render()
 }
 
 
-const getWinner = () => {
-// loop through array of arrays to see how many -1s and 1s there are, if count is 0 for whoevers turn it was then winner= turn *-1
-}
+//const getWinner = (spacesArr) => {
+    //if(PLAYER_LOOKUP[turn]==='rebels') {
+       // for(let i = 0; i < spacesArr.length; i++) {
+        //    if (!spacesArr[i].find(firstChild.classList.contains('rebels'))) {
+                //winner = turn * -1
+        //   }
+      // }
+   // } if(PLAYER_LOOKUP[turn]==='empire') {
+      //  for(let i = 0; i < spacesArr.length; i++) {
+        //    if(!spacesArr[i].find(firstChild.classList.contains('empire'))) {
+                //winner = turn * -1
+       //    }
+      //  }
+
+   // }
+    
+   // }
+
+
 
 const checkKing = () => {
 // if class of checekr = playerturn and targetNew parent row = 7, 
@@ -234,11 +247,11 @@ const checkKing = () => {
 
 const forfeit = () => {
     if (PLAYER_LOOKUP[turn]==='empire') {
-        winner = 1
+        winner = turn * -1
     } else if (PLAYER_LOOKUP[turn]==='rebels') {
-        winner = -1
+        winner = turn * -1
     }
-
+return winner
 }
 
 const render = () => {
