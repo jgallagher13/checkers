@@ -15,7 +15,7 @@ const messageEl = document.querySelector('h3')
 const playBtn = document.getElementById('playBtn')
 const forfeitBtn = document.getElementById('forfeitBtn')
 const spaces = document.querySelector('#board')
-const spacesArr = [...document.querySelectorAll('#board > div')]
+let spacesArr = [...document.querySelectorAll('#board > div')]
 
 
 
@@ -230,6 +230,7 @@ const handleMove = (event) => {
                     jumpPlayer(targetOld, targetNew)
                     targetNew.appendChild(targetOld).style.borderColor = 'white'
                     targetOld = null
+                    winner = getWinner()
                     turn *= -1
                     changeToBlack()
                 }
@@ -241,26 +242,37 @@ const handleMove = (event) => {
         checkMove(targetOld)
         targetOld.style.borderColor = 'gold'
     } 
-    
-    //winner = getWinner()
     render()
 }
 
 
-const getWinner = (spacesArr) => {
+const getWinner = () => {
+    spacesArr = [...document.querySelectorAll('div')]
+    //let winner = null
     if(PLAYER_LOOKUP[turn]==='rebels') {
-        for(let i = 0; i < spacesArr.length; i++) {
-            if (!spacesArr[i].find(firstChild.classList.contains('rebels'))) {
-                return turn * -1
-           }
-       }
+        spacesArr.forEach((space) => {
+            if (space.firstChild !== null && space.firstChild.className === 'empire') {
+                
+            }
+            else {
+                return winner = 'rebels'
+            }
+            
+        })
+        
+    
     } if(PLAYER_LOOKUP[turn]==='empire') {
-        for(let i = 0; i < spacesArr.length; i++) {
-            if(!spacesArr[i].find(firstChild.classList.contains('empire'))) {
-                return turn * -1
-           }
-        }
+        spacesArr.forEach((space) => {
+            if (space.firstChild !== null && space.firstChild.className === 'rebels') {
+                
+            }
+            else {
+                return winner = 'rebels'
+            }
+            
+        })
     }
+    //return winner
     }
 
 
