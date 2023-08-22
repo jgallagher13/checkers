@@ -23,11 +23,18 @@ const spacesArr = [...document.querySelectorAll('#board > div')]
 
 /*----- functions -----*/
 const renderBoard = () => {
+    //board.forEach((colArr, colIdx) => {
+        //colArr.forEach((cellVal, rowIdx) => {
+            //const cellId = `c${colIdx}r${rowIdx}`
+           // const cellEl = document.getElementById(cellId)
+          // cellEl.firstChild.(PLAYER_LOOKUP[cellVal]) 
+       // })
+   // })
 }
 
 const renderMessage = () => {
     if (winner) {
-        messageEl.innerText = `The ${PLAYER_LOOKUP[winner]} Win!`
+        messageEl.innerText = `Winner: The ${PLAYER_LOOKUP[winner]}!`
     } else {
         messageEl.innerText = `The ${PLAYER_LOOKUP[turn]}'s Turn`
     }
@@ -60,31 +67,38 @@ const checkMove = (targetOld) => {
         let NWOffsetId = `c${NWOffsetCol}r${NWOffsetRow}`
         let possibleNEcell = document.getElementById(NEOffsetId)
         let possibleNWcell = document.getElementById(NWOffsetId)
-     
-       possibleNEcell.style.backgroundColor = 'gold'
-       possibleNWcell.style.backgroundColor = 'gold'
-       let possibilityArr = [possibleNEcell, possibleNWcell]
-    
-           if (possibleNEcell.firstChild !== null  && possibleNEcell.firstChild.classList.contains('empire')) {
-           let NEJumpCol = NEOffsetCol + 1
-           let NEJumpRow = NEOffsetRow + 1
-           let NEJumpPosition = `c${NEJumpCol}r${NEJumpRow}`
-           let possibleNEJumpCell = document.getElementById(NEJumpPosition)
-            possibleNEJumpCell.style.backgroundColor = 'gold'
-            possibilityArr.push(possibleNEJumpCell)
-    
-           } if (possibleNWcell.firstChild !== null && possibleNWcell.firstChild.classList.contains('empire')){
-           let NWJumpCol = NWOffsetCol - 1
-           let NWJumpRow = NWOffsetRow + 1
-           let NWJumpPosition = `c${NWJumpCol}r${NWJumpRow}`
-           let possibleNWJumpCell = document.getElementById(NWJumpPosition)
-           possibleNWJumpCell.style.backgroundColor = 'gold'
-           possibilityArr.push(possibleNWJumpCell)
-           }
+       let possibilityArr = []
 
-        return possibilityArr
+         if(possibleNEcell !== null) {
+           possibleNEcell.style.backgroundColor = 'gold'
+           possibilityArr.push(possibleNEcell)
+             if (possibleNEcell.firstChild !== null  && possibleNEcell.firstChild.classList.contains('empire')) {
+             let NEJumpCol = NEOffsetCol + 1
+             let NEJumpRow = NEOffsetRow + 1
+             let NEJumpPosition = `c${NEJumpCol}r${NEJumpRow}`
+             let possibleNEJumpCell = document.getElementById(NEJumpPosition)
+             possibleNEJumpCell.style.backgroundColor = 'gold'
+             possibilityArr.push(possibleNEJumpCell)
+            }
+     } 
+     
+         if(possibleNWcell !== null) {
+            console.log('possibleNWcell')
+            possibleNWcell.style.backgroundColor = 'gold'
+            possibilityArr.push(possibleNWcell) 
+             if (possibleNWcell.firstChild !== null && possibleNWcell.firstChild.classList.contains('empire')){
+             let NWJumpCol = NWOffsetCol - 1
+             let NWJumpRow = NWOffsetRow + 1
+             let NWJumpPosition = `c${NWJumpCol}r${NWJumpRow}`
+             let possibleNWJumpCell = document.getElementById(NWJumpPosition)
+             possibleNWJumpCell.style.backgroundColor = 'gold'
+             possibilityArr.push(possibleNWJumpCell)
+            }
+     }
+           
+    return possibilityArr
         
-} else if (PLAYER_LOOKUP[turn] === 'empire') {
+}  if (PLAYER_LOOKUP[turn] === 'empire') {
         let NEOffsetCol = parsedColIdx - 1
         let NEOffsetRow = parsedRowIdx - 1
         
@@ -96,27 +110,34 @@ const checkMove = (targetOld) => {
         let NWOffsetId = `c${NWOffsetCol}r${NWOffsetRow}`
         let possibleNEcell = document.getElementById(NEOffsetId)
         let possibleNWcell = document.getElementById(NWOffsetId)
-        possibleNEcell.style.backgroundColor = 'gold'
+        let possibilityArr = []
+
+        if(possibleNEcell !== null) {
+         possibleNEcell.style.backgroundColor = 'gold'
+         possibilityArr.push(possibleNEcell)
+             if (possibleNEcell.firstChild !== null  && possibleNEcell.firstChild.classList.contains('rebels')) {
+             let NEJumpCol = NEOffsetCol - 1
+             let NEJumpRow = NEOffsetRow - 1
+             let NEJumpPosition = `c${NEJumpCol}r${NEJumpRow}`
+             let possibleNEJumpCell = document.getElementById(NEJumpPosition)
+             possibleNEJumpCell.style.backgroundColor = 'gold'
+             possibilityArr.push(possibleNEJumpCell)
+     
+            } 
+        }
+
+        if(possibleNWcell !== null) {
         possibleNWcell.style.backgroundColor = 'gold'
-
-        let possibilityArr = [possibleNEcell, possibleNWcell]
-
-        if (possibleNEcell.firstChild !== null  && possibleNEcell.firstChild.classList.contains('rebels')) {
-           let NEJumpCol = NEOffsetCol - 1
-           let NEJumpRow = NEOffsetRow - 1
-            let NEJumpPosition = `c${NEJumpCol}r${NEJumpRow}`
-            let possibleNEJumpCell = document.getElementById(NEJumpPosition)
-            possibleNEJumpCell.style.backgroundColor = 'gold'
-            possibilityArr.push(possibleNEJumpCell)
-    
-           } if (possibleNWcell.firstChild !== null && possibleNWcell.firstChild.classList.contains('rebels')){
-           let NWJumpCol = NWOffsetCol + 1
-           let NWJumpRow = NWOffsetRow - 1
-           let NWJumpPosition = `c${NWJumpCol}r${NWJumpRow}`
-           let possibleNWJumpCell = document.getElementById(NWJumpPosition)
-           possibleNWJumpCell.style.backgroundColor = 'gold'
-           possibilityArr.push(possibleNWJumpCell)
-          } 
+        possibilityArr.push(possibleNWcell)
+        if (possibleNWcell.firstChild !== null && possibleNWcell.firstChild.classList.contains('rebels')){
+            let NWJumpCol = NWOffsetCol + 1
+            let NWJumpRow = NWOffsetRow - 1
+            let NWJumpPosition = `c${NWJumpCol}r${NWJumpRow}`
+            let possibleNWJumpCell = document.getElementById(NWJumpPosition)
+            possibleNWJumpCell.style.backgroundColor = 'gold'
+            possibilityArr.push(possibleNWJumpCell)
+           } 
+        }
 
        return possibilityArr
     }
@@ -219,23 +240,21 @@ const handleMove = (event) => {
 }
 
 
-//const getWinner = (spacesArr) => {
-    //if(PLAYER_LOOKUP[turn]==='rebels') {
-       // for(let i = 0; i < spacesArr.length; i++) {
-        //    if (!spacesArr[i].find(firstChild.classList.contains('rebels'))) {
-                //winner = turn * -1
-        //   }
-      // }
-   // } if(PLAYER_LOOKUP[turn]==='empire') {
-      //  for(let i = 0; i < spacesArr.length; i++) {
-        //    if(!spacesArr[i].find(firstChild.classList.contains('empire'))) {
-                //winner = turn * -1
-       //    }
-      //  }
-
-   // }
-    
-   // }
+const getWinner = (spacesArr) => {
+    if(PLAYER_LOOKUP[turn]==='rebels') {
+        for(let i = 0; i < spacesArr.length; i++) {
+            if (!spacesArr[i].find(firstChild.classList.contains('rebels'))) {
+                return turn * -1
+           }
+       }
+    } if(PLAYER_LOOKUP[turn]==='empire') {
+        for(let i = 0; i < spacesArr.length; i++) {
+            if(!spacesArr[i].find(firstChild.classList.contains('empire'))) {
+                return turn * -1
+           }
+        }
+    }
+    }
 
 
 
@@ -281,4 +300,6 @@ init()
 
 /*----- event listeners -----*/
 spaces.addEventListener('click', handleMove)
+forfeitBtn.addEventListener('click', forfeit)
+playBtn.addEventListener('click', init)
 
