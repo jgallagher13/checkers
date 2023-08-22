@@ -77,13 +77,14 @@ const checkMove = (targetOld) => {
              let NEJumpRow = NEOffsetRow + 1
              let NEJumpPosition = `c${NEJumpCol}r${NEJumpRow}`
              let possibleNEJumpCell = document.getElementById(NEJumpPosition)
-             possibleNEJumpCell.style.backgroundColor = 'gold'
+             if (possibleNEJumpCell !== null) {
+                possibleNEJumpCell.style.backgroundColor = 'gold'
              possibilityArr.push(possibleNEJumpCell)
+             }
             }
      } 
      
          if(possibleNWcell !== null) {
-            console.log('possibleNWcell')
             possibleNWcell.style.backgroundColor = 'gold'
             possibilityArr.push(possibleNWcell) 
              if (possibleNWcell.firstChild !== null && possibleNWcell.firstChild.classList.contains('empire')){
@@ -91,8 +92,11 @@ const checkMove = (targetOld) => {
              let NWJumpRow = NWOffsetRow + 1
              let NWJumpPosition = `c${NWJumpCol}r${NWJumpRow}`
              let possibleNWJumpCell = document.getElementById(NWJumpPosition)
-             possibleNWJumpCell.style.backgroundColor = 'gold'
+             if (possibleNWJumpCell !== null) {
+                possibleNWJumpCell.style.backgroundColor = 'gold'
              possibilityArr.push(possibleNWJumpCell)
+             }
+             
             }
      }
            
@@ -120,9 +124,10 @@ const checkMove = (targetOld) => {
              let NEJumpRow = NEOffsetRow - 1
              let NEJumpPosition = `c${NEJumpCol}r${NEJumpRow}`
              let possibleNEJumpCell = document.getElementById(NEJumpPosition)
-             possibleNEJumpCell.style.backgroundColor = 'gold'
+             if (possibleNEJumpCell !== null) {
+                possibleNEJumpCell.style.backgroundColor = 'gold'
              possibilityArr.push(possibleNEJumpCell)
-     
+             }
             } 
         }
 
@@ -134,8 +139,10 @@ const checkMove = (targetOld) => {
             let NWJumpRow = NWOffsetRow - 1
             let NWJumpPosition = `c${NWJumpCol}r${NWJumpRow}`
             let possibleNWJumpCell = document.getElementById(NWJumpPosition)
-            possibleNWJumpCell.style.backgroundColor = 'gold'
+            if (possibleNWJumpCell !== null) {
+                possibleNWJumpCell.style.backgroundColor = 'gold'
             possibilityArr.push(possibleNWJumpCell)
+            }
            } 
         }
 
