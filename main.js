@@ -59,18 +59,13 @@ const checkMove = (targetOld) => {
         let NEOffsetId = `c${NEOffsetCol}r${NEOffsetRow}`
         let NWOffsetId = `c${NWOffsetCol}r${NWOffsetRow}`
         let possibleNEcell = document.getElementById(NEOffsetId)
+        
         let possibleNWcell = document.getElementById(NWOffsetId)
         possibleNEcell.style.backgroundColor = 'gold'
         possibleNWcell.style.backgroundColor = 'gold'
         let possibilityArr = [possibleNEcell, possibleNWcell]
-
-// jump logic- cannot read properties of null- classList line 68- also on next line
-    
-    
-
     
            if (possibleNEcell.firstChild !== null  && possibleNEcell.firstChild.classList.contains('empire')) {
-            console.log(possibleNEcell.firstChild.classList)
            let NEJumpCol = NEOffsetCol + 1
            let NEJumpRow = NEOffsetRow + 1
             let NEJumpPosition = `c${NEJumpCol}r${NEJumpRow}`
@@ -135,10 +130,63 @@ const changeToBlack = () => {
     
 }
 
-const jumpPlayer = (blackDiv) => {
-    //get child of black div
-    // remove/ destroy that div
+const jumpPlayer = (targetOld, targetNew) => {
+    let parentIdOld = targetOld.parentElement.id
+    let positionArrOld = parentIdOld.split('')
+    positionArrOld.shift()
+    positionArrOld.splice(1, 1)
+    let colIdxOld = positionArrOld[0]
+    let rowIdxOld = positionArrOld[1]
+    let parsedColIdxOld = parseInt(colIdxOld, 10) 
+    let parsedRowIdxOld = parseInt(rowIdxOld, 10)
+    
+    let parentIdNew = targetNew.id
+    let positionArrNew = parentIdNew.split('')
+    positionArrNew.shift()
+    positionArrNew.splice(1, 1)
+    let colIdxNew = positionArrNew[0]
+    let rowIdxNew = positionArrNew[1]
+    let parsedColIdxNew = parseInt(colIdxNew, 10) 
+    let parsedRowIdxNew = parseInt(rowIdxNew, 10)
 
+  let rebelsTurnNEJumpedCellCol = parsedColIdxOld + 1
+  let rebelsTurnNEJumpedCellRow = parsedRowIdxOld + 1
+  let rebelsTurnNEJumpedCellIdx = `c${rebelsTurnNEJumpedCellCol}r${rebelsTurnNEJumpedCellRow}`
+  let rebelsTurnNEJumpedCellPosition = document.getElementById(rebelsTurnNEJumpedCellIdx)
+
+  let rebelsTurnNWJumpedCellCol = parsedColIdxOld - 1
+  let rebelsTurnNWJumpedCellRow = parsedRowIdxOld + 1
+  let rebelsTurnNWJumpedCellIdx = `c${rebelsTurnNWJumpedCellCol}r${rebelsTurnNWJumpedCellRow}`
+  let rebelsTurnNWJumpedCellPosition = document.getElementById(rebelsTurnNWJumpedCellIdx)
+
+  let empireTurnNEJumpedCellCol = parsedColIdxOld - 1
+  let empireTurnNEJumpedCellRow = parsedRowIdxOld - 1
+  let empireTurnNEJumpedCellIdx = `c${empireTurnNEJumpedCellCol}r${empireTurnNEJumpedCellRow}`
+  let empireTurnNEJumpedCellPosition = document.getElementById(empireTurnNEJumpedCellIdx)
+
+  let empireTurnNWJumpedCellCol = parsedColIdxOld + 1
+  let empireTurnNWJumpedCellRow = parsedRowIdxOld - 1
+  let empireTurnNWJumpedCellIdx = `c${empireTurnNWJumpedCellCol}r${empireTurnNWJumpedCellRow}`
+  let empireTurnNWJumpedCellPosition = document.getElementById(empireTurnNWJumpedCellIdx)
+  console.log(empireTurnNWJumpedCellPosition)
+
+  if (PLAYER_LOOKUP[turn]==='rebels') {
+    if (parsedColIdxNew === parsedColIdxOld + 2 && parsedRowIdxNew === parsedRowIdxOld + 2) {
+        rebelsTurnNEJumpedCellPosition.removeChild(rebelsTurnNEJumpedCellPosition.firstChild)
+        return rebelsTurnNEJumpedCellPosition
+    } else if (parsedColIdxNew === parsedColIdxOld -2 && parsedRowIdxNew === parsedRowIdxOld + 2) {
+        rebelsTurnNWJumpedCellPosition.removeChild(rebelsTurnNWJumpedCellPosition.firstChild)
+        return rebelsTurnNWJumpedCellPosition
+    }
+  } else if (PLAYER_LOOKUP[turn]==='empire') {
+    if (parsedColIdxNew === parsedColIdxOld - 2 && parsedRowIdxNew === parsedRowIdxOld - 2) {
+        empireTurnNEJumpedCellPosition.removeChild(empireTurnNEJumpedCellPosition.firstChild)
+        return empireTurnNEJumpedCellPosition
+    } else if (parsedColIdxNew === parsedColIdxOld + 2 && parsedRowIdxNew === parsedRowIdxOld - 2) {
+        empireTurnNWJumpedCellPosition.removeChild(empireTurnNWJumpedCellPosition.firstChild)
+        return empireTurnNWJumpedCellPosition
+    }
+  }
 }
 
 let targetOld = null
@@ -150,7 +198,7 @@ const handleMove = (event) => {
                 let possArr = checkMove(targetOld)
                 if (possArr.includes(event.target)) {
                     targetNew = event.target
-                    
+                    jumpPlayer(targetOld, targetNew)
                     targetNew.appendChild(targetOld).style.borderColor = 'white'
                     targetOld = null
                     turn *= -1
@@ -173,10 +221,6 @@ const handleMove = (event) => {
     render()
 }
 
-
-//jumping- 
-// if square diagnal from targetOld has a child with class that is turn*-1 and there is an empty space on the other side of it you can move to that above space (highlight it and put it in array of options)
-// then if you click that space - targetNew, take off class of targetOld and add class to targetNew, and take off class of space you jumped
 
 const getWinner = () => {
 // loop through array of arrays to see how many -1s and 1s there are, if count is 0 for whoevers turn it was then winner= turn *-1
