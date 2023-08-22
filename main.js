@@ -59,7 +59,6 @@ const checkMove = (targetOld) => {
         let NEOffsetId = `c${NEOffsetCol}r${NEOffsetRow}`
         let NWOffsetId = `c${NWOffsetCol}r${NWOffsetRow}`
         let possibleNEcell = document.getElementById(NEOffsetId)
-        
         let possibleNWcell = document.getElementById(NWOffsetId)
         possibleNEcell.style.backgroundColor = 'gold'
         possibleNWcell.style.backgroundColor = 'gold'
@@ -80,8 +79,23 @@ const checkMove = (targetOld) => {
            let possibleNWJumpCell = document.getElementById(NWJumpPosition)
            possibleNWJumpCell.style.backgroundColor = 'gold'
            possibilityArr.push(possibleNWJumpCell)
-          } 
-          
+           
+          } else if ((possibleNEcell.firstChild !== null  && possibleNEcell.firstChild.classList.contains('empire')) && (possibleNWcell.firstChild !== null && possibleNWcell.firstChild.classList.contains('empire'))) {
+            let NEJumpCol = NEOffsetCol + 1
+            let NEJumpRow = NEOffsetRow + 1
+            let NEJumpPosition = `c${NEJumpCol}r${NEJumpRow}`
+            let possibleNEJumpCell = document.getElementById(NEJumpPosition)
+            possibleNEJumpCell.style.backgroundColor = 'gold'
+            possibilityArr.push(possibleNEJumpCell)
+
+           let NWJumpCol = NWOffsetCol - 1
+           let NWJumpRow = NWOffsetRow + 1
+           let NWJumpPosition = `c${NWJumpCol}r${NWJumpRow}`
+           let possibleNWJumpCell = document.getElementById(NWJumpPosition)
+           possibleNWJumpCell.style.backgroundColor = 'gold'
+           possibilityArr.push(possibleNWJumpCell)
+          }
+          console.log(possibilityArr)
         return possibilityArr
         
 } else if (PLAYER_LOOKUP[turn] === 'empire') {
@@ -98,6 +112,7 @@ const checkMove = (targetOld) => {
         let possibleNWcell = document.getElementById(NWOffsetId)
         possibleNEcell.style.backgroundColor = 'gold'
         possibleNWcell.style.backgroundColor = 'gold'
+
         let possibilityArr = [possibleNEcell, possibleNWcell]
 
         if (possibleNEcell.firstChild !== null  && possibleNEcell.firstChild.classList.contains('rebels')) {
