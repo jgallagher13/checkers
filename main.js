@@ -24,18 +24,22 @@ let spacesArr = [...document.querySelectorAll('#board > div')]
 /*----- functions -----*/
 const renderBoard = () => {
     //board.forEach((colArr, colIdx) => {
-        //colArr.forEach((cellVal, rowIdx) => {
-            //const cellId = `c${colIdx}r${rowIdx}`
-           //const cellEl = document.getElementById(cellId)
-          //cellEl.firstChild.className = PLAYER_LOOKUP[cellVal] 
+       // colArr.forEach((cellVal, rowIdx) => {
+           // const cellId = `c${colIdx}r${rowIdx}`
+          // const cellEl = document.getElementById(cellId)
+         // cellEl.firstChild.classList.add(PLAYER_LOOKUP[cellVal]) 
        //})
-   // })
+    //})
 }
 
 const renderMessage = () => {
-    if (winner) {
-        messageEl.innerText = `Winner: The ${PLAYER_LOOKUP[winner]}!`
-    } else {
+    if (winner === 'rebels') {
+        messageEl.innerText = "Winner: The Rebels!"
+       // messageEl.innerText = `Winner: The ${PLAYER_LOOKUP[winner]}!`
+    } else if (winner === 'empire') {
+        messageEl.innerText = "Winner: The Empire!"
+    } 
+    else {
         messageEl.innerText = `Move: The ${PLAYER_LOOKUP[turn]}`
     }
 }
@@ -230,7 +234,7 @@ const handleMove = (event) => {
                     jumpPlayer(targetOld, targetNew)
                     targetNew.appendChild(targetOld).style.borderColor = 'white'
                     targetOld = null
-                    winner = getWinner()
+                    getWinner()
                     turn *= -1
                     changeToBlack()
                 }
@@ -247,33 +251,39 @@ const handleMove = (event) => {
 }
 
 const getWinner = () => {
-    spacesArr = [...document.querySelectorAll('div')]
-    //let winner = null
-    if(PLAYER_LOOKUP[turn]==='rebels') {
-        spacesArr.forEach((space) => {
-            if (space.firstChild !== null && space.firstChild.className === 'empire') {
-                
-            }
-            else {
-                return 'rebels'
-            }
-            
-        })
-        
-    
-    } if(PLAYER_LOOKUP[turn]==='empire') {
-        spacesArr.forEach((space) => {
-            if (space.firstChild !== null && space.firstChild.className === 'rebels') {
-                
-            }
-            else {
-                return 'empire'
-            }
-            
-        })
-    }
-    //return winner
-    }
+    // only selecting the game board divs
+	spacesArr = [...document.querySelectorAll('#board > div')]
+	// console.log(spacesArr)
+	//let winner = null
+    // creating a winner array
+	const winnerArr = []
+
+    // for every space on the board
+	spacesArr.forEach((space) => {
+		if (
+			// space?.childNodes - if the space has a child node
+			// space?.childNodes[0] - take the first child node of the space
+			// ?.className - if the child node has a class name
+            // === 'rebels' - and the class name is rebels
+			space?.childNodes[0]?.className === 'rebels' ||
+            // OR
+            // same thing but for empire
+			space?.childNodes[0]?.className === 'empire'
+		) {
+            // if the space has a disc push that pace to the winner array
+            // goal is to only have 1 disc in the winner array (the winner)
+			winnerArr.push(space)
+		}
+	})
+
+    // checking to see if every disc in the winner array a rebel disc
+    const rebelWin = winnerArr.every(space => space?.childNodes[0]?.className === 'rebels')
+    // same but for empire
+    const empireWin = winnerArr.every(space => space?.childNodes[0]?.className === 'empire')
+    // if rebelWin is true then winner is rebels
+    // if empireWin is true then winner is empire
+    winner = rebelWin ? 'rebels' : empireWin ? 'empire' : null
+}
 
 
 const checkKing = (targetOld) => {
