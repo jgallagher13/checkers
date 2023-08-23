@@ -155,9 +155,9 @@ const changeToBlack = () => {
     blackDivs.forEach((div) => {
         div.style.backgroundColor = 'black'
     })
-
-    
 }
+
+
 
 const jumpPlayer = (targetOld, targetNew) => {
     let parentIdOld = targetOld.parentElement.id
@@ -228,7 +228,6 @@ const handleMove = (event) => {
                 if (possArr.includes(event.target)) {
                     targetNew = event.target
                     jumpPlayer(targetOld, targetNew)
-                    checkKing(targetOld, targetNew)
                     targetNew.appendChild(targetOld).style.borderColor = 'white'
                     targetOld = null
                     winner = getWinner()
@@ -242,10 +241,10 @@ const handleMove = (event) => {
         targetOld = event.target
         checkMove(targetOld)
         targetOld.style.borderColor = 'gold'
+        checkKing(targetOld)
     } 
     render()
 }
-
 
 const getWinner = () => {
     spacesArr = [...document.querySelectorAll('div')]
@@ -268,7 +267,7 @@ const getWinner = () => {
                 
             }
             else {
-                return 'rebels'
+                return 'empire'
             }
             
         })
@@ -277,24 +276,24 @@ const getWinner = () => {
     }
 
 
-
-const checkKing = (targetOld, targetNew) => {
-    let parentIdNew = targetNew.id
-    let positionArrNew = parentIdNew.split('')
-    positionArrNew.shift()
-    positionArrNew.splice(1, 1)
-    let colIdxNew = positionArrNew[0]
-    let rowIdxNew = positionArrNew[1]
-    let parsedColIdxNew = parseInt(colIdxNew, 10) 
-    let parsedRowIdxNew = parseInt(rowIdxNew, 10)
-    console.log(targetOld.firstChild)
-    if (PLAYER_LOOKUP[turn] ==='empire' && parsedRowIdxNew === 0) {
-        
+const checkKing = (targetOld) => {
+    let parentIdOld = targetOld.parentElement.id
+    let positionArrOld = parentIdOld.split('')
+    positionArrOld.shift()
+    positionArrOld.splice(1, 1)
+    let colIdxOld = positionArrOld[0]
+    let rowIdxOld = positionArrOld[1]
+    let parsedColIdxOld = parseInt(colIdxOld, 10) 
+    let parsedRowIdxOld = parseInt(rowIdxOld, 10)
+    
+    
+    if (PLAYER_LOOKUP[turn] ==='empire' && parsedRowIdxOld === 0) {
+        targetOld.classList.add('vader')
 
     }
 
-    if (PLAYER_LOOKUP[turn] ==='rebels' && parsedRowIdxNew === 7) {
-
+   if (PLAYER_LOOKUP[turn] ==='rebels' && parsedRowIdxOld === 7) {
+        targetOld.classList.add('yoda')
 
     }
  
