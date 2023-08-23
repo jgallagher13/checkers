@@ -11,7 +11,7 @@ let turn
 let winner
 
 /*----- cached elements  -----*/
-const messageEl = document.querySelector('h3')
+const messageEl = document.querySelector('h2')
 const playBtn = document.getElementById('playBtn')
 const forfeitBtn = document.getElementById('forfeitBtn')
 const spaces = document.querySelector('#board')
@@ -36,7 +36,7 @@ const renderMessage = () => {
     if (winner) {
         messageEl.innerText = `Winner: The ${PLAYER_LOOKUP[winner]}!`
     } else {
-        messageEl.innerText = `The ${PLAYER_LOOKUP[turn]}'s Turn`
+        messageEl.innerText = `Move: The ${PLAYER_LOOKUP[turn]}`
     }
 }
 
@@ -228,6 +228,7 @@ const handleMove = (event) => {
                 if (possArr.includes(event.target)) {
                     targetNew = event.target
                     jumpPlayer(targetOld, targetNew)
+                    checkKing(targetOld, targetNew)
                     targetNew.appendChild(targetOld).style.borderColor = 'white'
                     targetOld = null
                     winner = getWinner()
@@ -255,7 +256,7 @@ const getWinner = () => {
                 
             }
             else {
-                return winner = 'rebels'
+                return 'rebels'
             }
             
         })
@@ -267,7 +268,7 @@ const getWinner = () => {
                 
             }
             else {
-                return winner = 'rebels'
+                return 'rebels'
             }
             
         })
@@ -277,10 +278,28 @@ const getWinner = () => {
 
 
 
-const checkKing = () => {
-// if class of checekr = playerturn and targetNew parent row = 7, 
+const checkKing = (targetOld, targetNew) => {
+    let parentIdNew = targetNew.id
+    let positionArrNew = parentIdNew.split('')
+    positionArrNew.shift()
+    positionArrNew.splice(1, 1)
+    let colIdxNew = positionArrNew[0]
+    let rowIdxNew = positionArrNew[1]
+    let parsedColIdxNew = parseInt(colIdxNew, 10) 
+    let parsedRowIdxNew = parseInt(rowIdxNew, 10)
+    console.log(targetOld.firstChild)
+    if (PLAYER_LOOKUP[turn] ==='empire' && parsedRowIdxNew === 0) {
+        
+
+    }
+
+    if (PLAYER_LOOKUP[turn] ==='rebels' && parsedRowIdxNew === 7) {
+
+
+    }
+ 
 // change design on checker
-// make new checkMove where can go up and down
+// king can now go up and down
 }
 
 const forfeit = () => {
