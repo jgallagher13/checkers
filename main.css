@@ -14,11 +14,13 @@ body {
     margin-top: 1vmin;
     margin-bottom: 1vmin;
     margin: 0;
+   
 }
 
 header {
     font-size: 7vmin;
     letter-spacing: 1vmin;
+    color: gold;
 }
 
 h2 {
@@ -36,11 +38,13 @@ h3 {
 }
 
 #board>div {
-    border: 0.4vmin solid white
+    border: 0.2vmin solid blue;
 }
 
 .rebels {
-    background-color: blue;
+    background: url('images/rebelalliance.png');
+    background-size: 60px;
+    background-position: center;
     width: 60px;
     height: 60px;
     border-radius: 50%;
@@ -51,6 +55,8 @@ h3 {
 
 .empire {
     background: url('images/stormtrooper.jpg');
+    background-size: cover;
+    background-position: center;
     width: 60px;
     height: 60px;
     border-radius: 50%;

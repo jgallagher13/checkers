@@ -26,9 +26,9 @@ const renderBoard = () => {
     //board.forEach((colArr, colIdx) => {
         //colArr.forEach((cellVal, rowIdx) => {
             //const cellId = `c${colIdx}r${rowIdx}`
-           // const cellEl = document.getElementById(cellId)
-          // cellEl.firstChild.(PLAYER_LOOKUP[cellVal]) 
-       // })
+           //const cellEl = document.getElementById(cellId)
+          //cellEl.firstChild.className = PLAYER_LOOKUP[cellVal] 
+       //})
    // })
 }
 
