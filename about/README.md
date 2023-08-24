@@ -12,7 +12,7 @@
 
 ## Getting Started
 - Link to Game:
-
+[Star Wars Checkers](https://jgallagher13.github.io/checkers/) 
 - Instructions: 
     - This is a two player, turn-based game. One player plays as the Galactic Empire and one player plays as the Rebel Alliance.
     - The Rebel Alliance has the first move.
