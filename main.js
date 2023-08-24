@@ -1,6 +1,6 @@
 /*----- constants -----*/
 const PLAYER_LOOKUP = {
-    '0': null,
+    '0': '',
     '1': 'rebels',
     '-1': 'empire',
 }
@@ -28,14 +28,14 @@ const renderBoard = () => {
            // const cellId = `c${colIdx}r${rowIdx}`
           // const cellEl = document.getElementById(cellId)
          // cellEl.firstChild.classList.add(PLAYER_LOOKUP[cellVal]) 
-       //})
+      // })
     //})
 }
+
 
 const renderMessage = () => {
     if (winner === 'rebels') {
         messageEl.innerText = "Winner: The Rebels!"
-       // messageEl.innerText = `Winner: The ${PLAYER_LOOKUP[winner]}!`
     } else if (winner === 'empire') {
         messageEl.innerText = "Winner: The Empire!"
     } 
@@ -414,32 +414,33 @@ const checkKing = (targetOld) => {
     }
 }
 
-const forfeit = () => {
-    if (PLAYER_LOOKUP[turn]==='empire') {
-        winner = "rebels"
-    } else if (PLAYER_LOOKUP[turn]==='rebels') {
-        winner = "empire"
-    }
-return winner
-}
-
 const render = () => {
     renderBoard()
     renderMessage()
     renderControls()
 }
 
+const forfeit = () => {
+    if (PLAYER_LOOKUP[turn]==='empire') {
+        winner = "rebels"
+    } else if (PLAYER_LOOKUP[turn]==='rebels') {
+        winner = "empire"
+    }
+    render()
+return winner
+}
+
 const init = () => {
-    board = [
-        [-1, 0 , -1, 0, -1, 0, -1, 0],
-        [0, -1, 0, -1, 0, -1, 0, -1],
-        [-1, 0, -1, 0, -1, 0, -1, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 1, 0, 1, 0, 1, 0, 1],
-        [1, 0, 1, 0, 1, 0, 1, 0],
-        [0, 1, 0, 1, 0, 1, 0, 1],
-    ]
+    //board = [
+      //  [-1, 0 , -1, 0, -1, 0, -1, 0],
+       // [0, -1, 0, -1, 0, -1, 0, -1],
+      //  [-1, 0, -1, 0, -1, 0, -1, 0],
+      //  [0, 0, 0, 0, 0, 0, 0, 0],
+      //  [0, 0, 0, 0, 0, 0, 0, 0],
+      //  [0, 1, 0, 1, 0, 1, 0, 1],
+     //   [1, 0, 1, 0, 1, 0, 1, 0],
+      //  [0, 1, 0, 1, 0, 1, 0, 1],
+   // ]
     turn = 1
     winner = null
     render ()
