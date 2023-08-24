@@ -2,7 +2,10 @@
 - Variations of the game of checkers have been played and loved by ancient and modern people alike! Now this game of strategy is making its debut in a galaxy far far away! In this Star Wars themed checkers game, play as either the Rebel Alliance or the Galactic Empire! May the force be with you.
 
 ## Images of Game
+- Start of game
 ![Alt text](images/screenshot.png)
+
+- Forfeit functionality and king functionality
 ![Alt text](images/screenshot2.png)
 
 ## Technologies Used
