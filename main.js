@@ -157,15 +157,58 @@ const checkMove = (targetOld) => {
         let NEOffsetCol = parsedColIdx - 1
         let NEOffsetRow = parsedRowIdx - 1
         
+        let SEOffsetCol = parsedColIdx - 1
+        let SEOffsetRow = parsedRowIdx + 1
     
         let NWOffsetCol = parsedColIdx + 1
         let NWOffsetRow = parsedRowIdx - 1
+
+        let SWOffsetCol = parsedColIdx + 1
+        let SWOffsetRow = parsedRowIdx + 1
     
         let NEOffsetId = `c${NEOffsetCol}r${NEOffsetRow}`
         let NWOffsetId = `c${NWOffsetCol}r${NWOffsetRow}`
+        let SEOffsetId = `c${SEOffsetCol}r${SEOffsetRow}`
+        let SWOffsetId = `c${SWOffsetCol}r${SWOffsetRow}`
         let possibleNEcell = document.getElementById(NEOffsetId)
         let possibleNWcell = document.getElementById(NWOffsetId)
+        let possibleSEcell = document.getElementById(SEOffsetId)
+        let possibleSWcell = document.getElementById(SWOffsetId)
+
+
         let possibilityArr = []
+
+
+        if (targetOld !== null && targetOld.classList.contains('vader')) {
+            if(possibleSEcell !== null) {
+                possibleSEcell.style.backgroundColor = 'gold'
+                possibilityArr.push(possibleSEcell)
+                  if(possibleSEcell.firstChild !== null && possibleSEcell.firstChild.classList.contains('rebels')) {
+                    let SEJumpCol = SEOffsetCol - 1
+                    let SEJumpRow = SEOffsetRow + 1
+                    let SEJumpPosition = `c${SEJumpCol}r${SEJumpRow}`
+                    let possibleSEJumpCell = document.getElementById(SEJumpPosition)
+                    if (possibleSEJumpCell !== null) {
+                        possibleSEJumpCell.style.backgroundColor = 'gold'
+                        possibilityArr.push(possibleSEJumpCell)
+                    }
+                  }
+            }
+            if(possibleSWcell !== null) {
+                possibleSWcell.style.backgroundColor = 'gold'
+                possibilityArr.push(possibleSWcell)
+                  if(possibleSWcell.firstChild !== null && possibleSWcell.firstChild.classList.contains('empire')) {
+                    let SWJumpCol = SEOffsetCol + 1 
+                    let SWJumpRow = SEOffsetRow + 1
+                    let SWJumpPosition = `c${SWJumpCol}r${SWJumpRow}`
+                    let possibleSWJumpCell = document.getElementById(SWJumpPosition)
+                    if (possibleSWJumpCell !== null) {
+                        possibleSWJumpCell.style.backgroundColor = 'gold'
+                        possibilityArr.push(possibleSWJumpCell)
+                    }
+                  }
+            }
+           }
 
         if(possibleNEcell !== null) {
          possibleNEcell.style.backgroundColor = 'gold'
@@ -322,9 +365,7 @@ const getWinner = () => {
 
 
 const checkKing = (targetOld) => {
-    console.log(targetOld)
     let parentIdOld = targetOld.parentElement.id
-    console.log(targetOld.parentElement.id)
     let positionArrOld = parentIdOld.split('')
     positionArrOld.shift()
     positionArrOld.splice(1, 1)
