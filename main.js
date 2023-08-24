@@ -62,16 +62,63 @@ const checkMove = (targetOld) => {
     if(PLAYER_LOOKUP[turn] === 'rebels'){
         let NEOffsetCol = parsedColIdx + 1
         let NEOffsetRow = parsedRowIdx + 1
+
+        let SEOffsetCol = parsedColIdx + 1
+        let SEOffsetRow = parsedRowIdx - 1
         
     
         let NWOffsetCol = parsedColIdx - 1
         let NWOffsetRow = parsedRowIdx + 1
+
+        let SWOffsetCol = parsedColIdx - 1
+        let SWOffsetRow = parsedRowIdx - 1 
     
         let NEOffsetId = `c${NEOffsetCol}r${NEOffsetRow}`
         let NWOffsetId = `c${NWOffsetCol}r${NWOffsetRow}`
+        let SEOffsetId = `c${SEOffsetCol}r${SEOffsetRow}`
+        let SWOffsetId = `c${SWOffsetCol}r${SWOffsetRow}`
         let possibleNEcell = document.getElementById(NEOffsetId)
         let possibleNWcell = document.getElementById(NWOffsetId)
+        let possibleSEcell = document.getElementById(SEOffsetId)
+        let possibleSWcell = document.getElementById(SWOffsetId)
+
        let possibilityArr = []
+
+       if (targetOld !== null && targetOld.classList.contains('yoda')) {
+        console.log('yoda found')
+        if(possibleSEcell !== null) {
+            possibleSEcell.style.backgroundColor = 'gold'
+            possibilityArr.push(possibleSEcell)
+              if(possibleSEcell.firstChild !== null && possibleSEcell.firstChild.classList.contains('empire')) {
+                let SEJumpCol = SEOffsetCol + 1 
+                let SEJumpRow = SEOffsetRow - 1
+                let SEJumpPosition = `c${SEJumpCol}r${SEJumpRow}`
+                let possibleSEJumpCell = document.getElementById(SEJumpPosition)
+                if (possibleSEJumpCell !== null) {
+                    possibleSEJumpCell.style.backgroundColor = 'gold'
+                    possibilityArr.push(possibleSEJumpCell)
+                }
+              }
+        }
+        if(possibleSWcell !== null) {
+            possibleSWcell.style.backgroundColor = 'gold'
+            possibilityArr.push(possibleSWcell)
+              if(possibleSWcell.firstChild !== null && possibleSWcell.firstChild.classList.contains('empire')) {
+                let SWJumpCol = SEOffsetCol + 1 
+                let SWJumpRow = SEOffsetRow - 1
+                let SWJumpPosition = `c${SWJumpCol}r${SWJumpRow}`
+                let possibleSWJumpCell = document.getElementById(SWJumpPosition)
+                if (possibleSWJumpCell !== null) {
+                    possibleSWJumpCell.style.backgroundColor = 'gold'
+                    possibilityArr.push(possibleSWJumpCell)
+                }
+              }
+        }
+       }
+
+        
+       
+
 
          if(possibleNEcell !== null) {
            possibleNEcell.style.backgroundColor = 'gold'
@@ -236,6 +283,7 @@ const handleMove = (event) => {
                     targetOld = null
                     getWinner()
                     turn *= -1
+                    
                     changeToBlack()
                 }
             }
@@ -243,51 +291,40 @@ const handleMove = (event) => {
     }
     if((event.target.classList.contains('empire') && PLAYER_LOOKUP[turn]==='empire') || (event.target.classList.contains('rebels') && PLAYER_LOOKUP[turn]==='rebels')){
         targetOld = event.target
+        checkKing(targetOld)
         checkMove(targetOld)
         targetOld.style.borderColor = 'gold'
-        checkKing(targetOld)
+        
     } 
     render()
 }
 
 const getWinner = () => {
-    // only selecting the game board divs
 	spacesArr = [...document.querySelectorAll('#board > div')]
-	// console.log(spacesArr)
-	//let winner = null
-    // creating a winner array
 	const winnerArr = []
-
-    // for every space on the board
+    
 	spacesArr.forEach((space) => {
 		if (
-			// space?.childNodes - if the space has a child node
-			// space?.childNodes[0] - take the first child node of the space
-			// ?.className - if the child node has a class name
-            // === 'rebels' - and the class name is rebels
+			
 			space?.childNodes[0]?.className === 'rebels' ||
-            // OR
-            // same thing but for empire
+           
 			space?.childNodes[0]?.className === 'empire'
 		) {
-            // if the space has a disc push that pace to the winner array
-            // goal is to only have 1 disc in the winner array (the winner)
+         
 			winnerArr.push(space)
 		}
 	})
 
-    // checking to see if every disc in the winner array a rebel disc
     const rebelWin = winnerArr.every(space => space?.childNodes[0]?.className === 'rebels')
-    // same but for empire
     const empireWin = winnerArr.every(space => space?.childNodes[0]?.className === 'empire')
-    // if rebelWin is true then winner is rebels
-    // if empireWin is true then winner is empire
     winner = rebelWin ? 'rebels' : empireWin ? 'empire' : null
 }
 
 
 const checkKing = (targetOld) => {
+    console.log(targetOld)
     let parentIdOld = targetOld.parentElement.id
+    console.log(targetOld.parentElement.id)
     let positionArrOld = parentIdOld.split('')
     positionArrOld.shift()
     positionArrOld.splice(1, 1)
@@ -306,9 +343,6 @@ const checkKing = (targetOld) => {
         targetOld.classList.add('yoda')
 
     }
- 
-// change design on checker
-// king can now go up and down
 }
 
 const forfeit = () => {
