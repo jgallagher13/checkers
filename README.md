@@ -5,8 +5,11 @@
 - Start of game
 ![Alt text](images/screenshot.png)
 
-- Forfeit functionality and king functionality
+- King functionality
 ![Alt text](images/screenshot2.png)
+
+- Winner!
+![Alt text](images/screenshot3.png)
 
 ## Technologies Used
 - HTML

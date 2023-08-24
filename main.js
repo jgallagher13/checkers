@@ -9,7 +9,6 @@ let turn
 let winner
 
 const messageEl = document.querySelector('h2')
-const playBtn = document.getElementById('playBtn')
 const forfeitBtn = document.getElementById('forfeitBtn')
 const spaces = document.querySelector('#board')
 let spacesArr = [...document.querySelectorAll('#board > div')]
