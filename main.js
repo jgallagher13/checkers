@@ -342,18 +342,15 @@ const getWinner = () => {
     
 	spacesArr.forEach((space) => {
 		if (
-			
-			space?.childNodes[0]?.className === 'rebels' ||
-           
-			space?.childNodes[0]?.className === 'empire'
+			space?.childNodes[0]?.classList.contains('rebels')  ||
+			space?.childNodes[0]?.classList.contains('empire')
 		) {
-         
 			winnerArr.push(space)
 		}
 	})
 
-    const rebelWin = winnerArr.every(space => space?.childNodes[0]?.className === 'rebels')
-    const empireWin = winnerArr.every(space => space?.childNodes[0]?.className === 'empire')
+    const rebelWin = winnerArr.every(space => space?.childNodes[0]?.classList.contains('rebels'))
+    const empireWin = winnerArr.every(space => space?.childNodes[0]?.classList.contains('empire'))
     winner = rebelWin ? 'rebels' : empireWin ? 'empire' : null
 }
 
