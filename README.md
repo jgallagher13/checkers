@@ -61,7 +61,7 @@ font-family: 'Star Wars', sans-serif;
 
 
 ## Wireframe
-![Alt text](wireframe.png)
+![Alt text](images/wireframe.png)
 
 ## Pseudocode
 - Constants
