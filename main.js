@@ -1,37 +1,18 @@
-/*----- constants -----*/
 const PLAYER_LOOKUP = {
     '0': '',
     '1': 'rebels',
     '-1': 'empire',
 }
 
-/*----- state variables -----*/
 let board
 let turn
 let winner
 
-/*----- cached elements  -----*/
 const messageEl = document.querySelector('h2')
 const playBtn = document.getElementById('playBtn')
 const forfeitBtn = document.getElementById('forfeitBtn')
 const spaces = document.querySelector('#board')
 let spacesArr = [...document.querySelectorAll('#board > div')]
-
-
-
-
-
-/*----- functions -----*/
-const renderBoard = () => {
-    //board.forEach((colArr, colIdx) => {
-       // colArr.forEach((cellVal, rowIdx) => {
-           // const cellId = `c${colIdx}r${rowIdx}`
-          // const cellEl = document.getElementById(cellId)
-         // cellEl.firstChild.classList.add(PLAYER_LOOKUP[cellVal]) 
-      // })
-    //})
-}
-
 
 const renderMessage = () => {
     if (winner === 'rebels') {
@@ -43,11 +24,6 @@ const renderMessage = () => {
         messageEl.innerText = `Move: The ${PLAYER_LOOKUP[turn]}`
     }
 }
-
-const renderControls = () => {
-    playBtn.style.visibility = winner ? 'visible' : 'hidden'
-}
-
 
 const checkMove = (targetOld) => {
     let parentId = targetOld.parentElement.id
@@ -66,7 +42,6 @@ const checkMove = (targetOld) => {
         let SEOffsetCol = parsedColIdx + 1
         let SEOffsetRow = parsedRowIdx - 1
         
-    
         let NWOffsetCol = parsedColIdx - 1
         let NWOffsetRow = parsedRowIdx + 1
 
@@ -114,10 +89,6 @@ const checkMove = (targetOld) => {
               }
         }
        }
-
-        
-       
-
 
          if(possibleNEcell !== null) {
            possibleNEcell.style.backgroundColor = 'gold'
@@ -174,9 +145,7 @@ const checkMove = (targetOld) => {
         let possibleSEcell = document.getElementById(SEOffsetId)
         let possibleSWcell = document.getElementById(SWOffsetId)
 
-
         let possibilityArr = []
-
 
         if (targetOld !== null && targetOld.classList.contains('vader')) {
             if(possibleSEcell !== null) {
@@ -238,19 +207,16 @@ const checkMove = (targetOld) => {
             }
            } 
         }
-
        return possibilityArr
     }
-   
 }
+
 const changeToBlack = () => {
     const blackDivs = document.querySelectorAll('.black')
     blackDivs.forEach((div) => {
         div.style.backgroundColor = 'black'
     })
 }
-
-
 
 const jumpPlayer = (targetOld, targetNew) => {
     let parentIdOld = targetOld.parentElement.id
@@ -311,7 +277,6 @@ const jumpPlayer = (targetOld, targetNew) => {
   let empireTurnSWJumpedCellIdx = `c${empireTurnSWJumpedCellCol}r${empireTurnSWJumpedCellRow}`
   let empireTurnSWJumpedCellPosition = document.getElementById(empireTurnSWJumpedCellIdx)
   
-
   if (PLAYER_LOOKUP[turn]==='rebels') {
     if (parsedColIdxNew === parsedColIdxOld + 2 && parsedRowIdxNew === parsedRowIdxOld + 2) {
         rebelsTurnNEJumpedCellPosition.removeChild(rebelsTurnNEJumpedCellPosition.firstChild)
@@ -393,7 +358,6 @@ const getWinner = () => {
     winner = rebelWin ? 'rebels' : empireWin ? 'empire' : null
 }
 
-
 const checkKing = (targetOld) => {
     let parentIdOld = targetOld.parentElement.id
     let positionArrOld = parentIdOld.split('')
@@ -402,22 +366,17 @@ const checkKing = (targetOld) => {
     let rowIdxOld = positionArrOld[1] 
     let parsedRowIdxOld = parseInt(rowIdxOld, 10)
     
-    
     if (PLAYER_LOOKUP[turn] ==='empire' && parsedRowIdxOld === 0) {
         targetOld.classList.add('vader')
-
     }
 
    if (PLAYER_LOOKUP[turn] ==='rebels' && parsedRowIdxOld === 7) {
         targetOld.classList.add('yoda')
-
     }
 }
 
 const render = () => {
-    renderBoard()
     renderMessage()
-    renderControls()
 }
 
 const forfeit = () => {
@@ -431,16 +390,6 @@ return winner
 }
 
 const init = () => {
-    //board = [
-      //  [-1, 0 , -1, 0, -1, 0, -1, 0],
-       // [0, -1, 0, -1, 0, -1, 0, -1],
-      //  [-1, 0, -1, 0, -1, 0, -1, 0],
-      //  [0, 0, 0, 0, 0, 0, 0, 0],
-      //  [0, 0, 0, 0, 0, 0, 0, 0],
-      //  [0, 1, 0, 1, 0, 1, 0, 1],
-     //   [1, 0, 1, 0, 1, 0, 1, 0],
-      //  [0, 1, 0, 1, 0, 1, 0, 1],
-   // ]
     turn = 1
     winner = null
     render ()
@@ -448,9 +397,7 @@ const init = () => {
 
 init()
 
-
-/*----- event listeners -----*/
 spaces.addEventListener('click', handleMove)
 forfeitBtn.addEventListener('click', forfeit)
-playBtn.addEventListener('click', init)
+
 
