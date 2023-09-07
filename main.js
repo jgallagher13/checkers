@@ -4,7 +4,6 @@ const PLAYER_LOOKUP = {
     '-1': 'empire',
 }
 
-let board
 let turn
 let winner
 
@@ -24,188 +23,156 @@ const renderMessage = () => {
     }
 }
 
-const checkMove = (targetOld) => {
+const getCellId = (targetOld) => {
     let parentId = targetOld.parentElement.id
+    console.log(parentId)
     let positionArr = parentId.split('')
     positionArr.shift()
     positionArr.splice(1, 1)
-    let colIdx = positionArr[0]
-    let rowIdx = positionArr[1]
-    let parsedColIdx = parseInt(colIdx, 10) 
-    let parsedRowIdx = parseInt(rowIdx, 10)
-    
-    if(PLAYER_LOOKUP[turn] === 'rebels'){
-        let NEOffsetCol = parsedColIdx + 1
-        let NEOffsetRow = parsedRowIdx + 1
+    let unparsedColIdx = positionArr[0]
+    console.log(unparsedColIdx)
+    let unparsedRowIdx = positionArr[1]
+    let colIdx = parseInt(unparsedColIdx, 10) 
+    let rowIdx = parseInt(unparsedRowIdx, 10)
+    return [colIdx, rowIdx]  
+} 
 
-        let SEOffsetCol = parsedColIdx + 1
-        let SEOffsetRow = parsedRowIdx - 1
-        
-        let NWOffsetCol = parsedColIdx - 1
-        let NWOffsetRow = parsedRowIdx + 1
+const getOffsetId = (colOffset, rowOffset) => {
+    return `c${colOffset}r${rowOffset}`;
+};
 
-        let SWOffsetCol = parsedColIdx - 1
-        let SWOffsetRow = parsedRowIdx - 1 
-    
-        let NEOffsetId = `c${NEOffsetCol}r${NEOffsetRow}`
-        let NWOffsetId = `c${NWOffsetCol}r${NWOffsetRow}`
-        let SEOffsetId = `c${SEOffsetCol}r${SEOffsetRow}`
-        let SWOffsetId = `c${SWOffsetCol}r${SWOffsetRow}`
-        let possibleNEcell = document.getElementById(NEOffsetId)
-        let possibleNWcell = document.getElementById(NWOffsetId)
-        let possibleSEcell = document.getElementById(SEOffsetId)
-        let possibleSWcell = document.getElementById(SWOffsetId)
+const getOffsetCell = (colOffset, rowOffset) => {
+    const offsetId = getOffsetId(colOffset, rowOffset);
+    return document.getElementById(offsetId);
+};
 
-       let possibilityArr = []
+const highlightCell = (cell) => {
+    if (cell !== null  && cell.firstChild === null) {
+        cell.style.backgroundColor = 'gold';
+    }
+};
 
-       if (targetOld !== null && targetOld.classList.contains('yoda')) {
-        if(possibleSEcell !== null) {
-            possibleSEcell.style.backgroundColor = 'gold'
-            possibilityArr.push(possibleSEcell)
-              if(possibleSEcell.firstChild !== null && possibleSEcell.firstChild.classList.contains('empire')) {
-                let SEJumpCol = SEOffsetCol + 1 
-                let SEJumpRow = SEOffsetRow - 1
-                let SEJumpPosition = `c${SEJumpCol}r${SEJumpRow}`
-                let possibleSEJumpCell = document.getElementById(SEJumpPosition)
-                if (possibleSEJumpCell !== null) {
-                    possibleSEJumpCell.style.backgroundColor = 'gold'
-                    possibilityArr.push(possibleSEJumpCell)
-                }
-              }
+const checkMovePossibilityRebels = (targetOld, colIdx, rowIdx) => {
+    let possibilityArr = [];
+    let offsetCellNE = getOffsetCell(colIdx + 1, rowIdx + 1);
+    let offsetCellNW = getOffsetCell(colIdx - 1, rowIdx + 1);
+    let offsetCellSE = getOffsetCell(colIdx + 1, rowIdx - 1);
+    let offsetCellSW = getOffsetCell(colIdx - 1, rowIdx - 1);
+    if (offsetCellNE !== null) {
+        highlightCell(offsetCellNE);
+        possibilityArr.push(offsetCellNE);
+        if (offsetCellNE.firstChild !== null && offsetCellNE.firstChild.classList.contains('empire')) {
+            const jumpCellNE = getOffsetCell(colIdx + 2, rowIdx + 2);
+            if (jumpCellNE !== null) {
+                highlightCell(jumpCellNE);
+                possibilityArr.push(jumpCellNE);
+            }
         }
-        if(possibleSWcell !== null) {
-            possibleSWcell.style.backgroundColor = 'gold'
-            possibilityArr.push(possibleSWcell)
-              if(possibleSWcell.firstChild !== null && possibleSWcell.firstChild.classList.contains('empire')) {
-                let SWJumpCol = SWOffsetCol - 1 
-                let SWJumpRow = SWOffsetRow - 1
-                let SWJumpPosition = `c${SWJumpCol}r${SWJumpRow}`
-                let possibleSWJumpCell = document.getElementById(SWJumpPosition)
-                if (possibleSWJumpCell !== null) {
-                    possibleSWJumpCell.style.backgroundColor = 'gold'
-                    possibilityArr.push(possibleSWJumpCell)
-                }
-              }
+    }
+    if (offsetCellNW !== null) {
+        highlightCell(offsetCellNW);
+        possibilityArr.push(offsetCellNW);
+        if (offsetCellNW.firstChild !== null && offsetCellNW.firstChild.classList.contains('empire')) {
+            const jumpCellNW = getOffsetCell(colIdx - 2, rowIdx + 2)
+            if (jumpCellNW !== null) {
+                highlightCell(jumpCellNW);
+                possibilityArr.push(jumpCellNW)
+            }
         }
-       }
-
-         if(possibleNEcell !== null) {
-           possibleNEcell.style.backgroundColor = 'gold'
-           possibilityArr.push(possibleNEcell)
-             if (possibleNEcell.firstChild !== null  && possibleNEcell.firstChild.classList.contains('empire')) {
-             let NEJumpCol = NEOffsetCol + 1
-             let NEJumpRow = NEOffsetRow + 1
-             let NEJumpPosition = `c${NEJumpCol}r${NEJumpRow}`
-             let possibleNEJumpCell = document.getElementById(NEJumpPosition)
-             if (possibleNEJumpCell !== null) {
-                possibleNEJumpCell.style.backgroundColor = 'gold'
-             possibilityArr.push(possibleNEJumpCell)
-             }
-            }
-     } 
-     
-         if(possibleNWcell !== null) {
-            possibleNWcell.style.backgroundColor = 'gold'
-            possibilityArr.push(possibleNWcell) 
-             if (possibleNWcell.firstChild !== null && possibleNWcell.firstChild.classList.contains('empire')){
-             let NWJumpCol = NWOffsetCol - 1
-             let NWJumpRow = NWOffsetRow + 1
-             let NWJumpPosition = `c${NWJumpCol}r${NWJumpRow}`
-             let possibleNWJumpCell = document.getElementById(NWJumpPosition)
-             if (possibleNWJumpCell !== null) {
-                possibleNWJumpCell.style.backgroundColor = 'gold'
-             possibilityArr.push(possibleNWJumpCell)
-             }
-             
-            }
-     }
-           
-    return possibilityArr
-        
-}  if (PLAYER_LOOKUP[turn] === 'empire') {
-        let NEOffsetCol = parsedColIdx - 1
-        let NEOffsetRow = parsedRowIdx - 1
-        
-        let SEOffsetCol = parsedColIdx - 1
-        let SEOffsetRow = parsedRowIdx + 1
-    
-        let NWOffsetCol = parsedColIdx + 1
-        let NWOffsetRow = parsedRowIdx - 1
-
-        let SWOffsetCol = parsedColIdx + 1
-        let SWOffsetRow = parsedRowIdx + 1
-    
-        let NEOffsetId = `c${NEOffsetCol}r${NEOffsetRow}`
-        let NWOffsetId = `c${NWOffsetCol}r${NWOffsetRow}`
-        let SEOffsetId = `c${SEOffsetCol}r${SEOffsetRow}`
-        let SWOffsetId = `c${SWOffsetCol}r${SWOffsetRow}`
-        let possibleNEcell = document.getElementById(NEOffsetId)
-        let possibleNWcell = document.getElementById(NWOffsetId)
-        let possibleSEcell = document.getElementById(SEOffsetId)
-        let possibleSWcell = document.getElementById(SWOffsetId)
-
-        let possibilityArr = []
-
-        if (targetOld !== null && targetOld.classList.contains('vader')) {
-            if(possibleSEcell !== null) {
-                possibleSEcell.style.backgroundColor = 'gold'
-                possibilityArr.push(possibleSEcell)
-                  if(possibleSEcell.firstChild !== null && possibleSEcell.firstChild.classList.contains('rebels')) {
-                    let SEJumpCol = SEOffsetCol - 1
-                    let SEJumpRow = SEOffsetRow + 1
-                    let SEJumpPosition = `c${SEJumpCol}r${SEJumpRow}`
-                    let possibleSEJumpCell = document.getElementById(SEJumpPosition)
-                    if (possibleSEJumpCell !== null) {
-                        possibleSEJumpCell.style.backgroundColor = 'gold'
-                        possibilityArr.push(possibleSEJumpCell)
-                    }
-                  }
-            }
-            if(possibleSWcell !== null) {
-                possibleSWcell.style.backgroundColor = 'gold'
-                possibilityArr.push(possibleSWcell)
-                  if(possibleSWcell.firstChild !== null && possibleSWcell.firstChild.classList.contains('rebels')) {
-                    let SWJumpCol = SWOffsetCol + 1 
-                    let SWJumpRow = SWOffsetRow + 1
-                    let SWJumpPosition = `c${SWJumpCol}r${SWJumpRow}`
-                    let possibleSWJumpCell = document.getElementById(SWJumpPosition)
-                    if (possibleSWJumpCell !== null) {
-                        possibleSWJumpCell.style.backgroundColor = 'gold'
-                        possibilityArr.push(possibleSWJumpCell)
-                    }
-                  }
-            }
+    }
+    if (targetOld !== null && targetOld.classList.contains('yoda')) {
+        if (offsetCellSE != null) {
+            highlightCell(offsetCellSE)
+            possibilityArr.push(offsetCellSE)
+        }
+        if (offsetCellSE.firstChild !== null && offsetCellSE.firstChild.classList.contains('empire')) {
+            const jumpCellSE = getOffsetCell(colIdx + 2, rowIdx - 2);
+            if (jumpCellSE !== null) {
+                highlightCell(jumpCellSE);
+               possibilityArr.push(jumpCellSE)
            }
-
-        if(possibleNEcell !== null) {
-         possibleNEcell.style.backgroundColor = 'gold'
-         possibilityArr.push(possibleNEcell)
-             if (possibleNEcell.firstChild !== null  && possibleNEcell.firstChild.classList.contains('rebels')) {
-             let NEJumpCol = NEOffsetCol - 1
-             let NEJumpRow = NEOffsetRow - 1
-             let NEJumpPosition = `c${NEJumpCol}r${NEJumpRow}`
-             let possibleNEJumpCell = document.getElementById(NEJumpPosition)
-             if (possibleNEJumpCell !== null) {
-                possibleNEJumpCell.style.backgroundColor = 'gold'
-             possibilityArr.push(possibleNEJumpCell)
-             }
-            } 
         }
-
-        if(possibleNWcell !== null) {
-        possibleNWcell.style.backgroundColor = 'gold'
-        possibilityArr.push(possibleNWcell)
-        if (possibleNWcell.firstChild !== null && possibleNWcell.firstChild.classList.contains('rebels')){
-            let NWJumpCol = NWOffsetCol + 1
-            let NWJumpRow = NWOffsetRow - 1
-            let NWJumpPosition = `c${NWJumpCol}r${NWJumpRow}`
-            let possibleNWJumpCell = document.getElementById(NWJumpPosition)
-            if (possibleNWJumpCell !== null) {
-                possibleNWJumpCell.style.backgroundColor = 'gold'
-            possibilityArr.push(possibleNWJumpCell)
+        if (offsetCellSW !== null) {
+            highlightCell(offsetCellSW)
+            possibilityArr.push(offsetCellSW)
+        }
+        if (offsetCellSW.firstChild !== null && offsetCellSW.firstChild.classList.contains('empire')) {
+            const jumpCellSW = getOffsetCell(colIdx - 2, rowIdx - 2);
+            if (jumpCellSW !== null) {
+                highlightCell(jumpCellSW);
+                possibilityArr.push(jumpCellSW)
             }
-           } 
         }
+            }
+    return possibilityArr
+};
+
+const checkMovePossibilityEmpire = (targetOld, colIdx, rowIdx) => {
+    let possibilityArr = [];
+    let offsetCellNE = getOffsetCell(colIdx - 1, rowIdx - 1);
+    let offsetCellNW = getOffsetCell(colIdx + 1, rowIdx - 1);
+    let offsetCellSE = getOffsetCell(colIdx - 1, rowIdx + 1);
+    let offsetCellSW = getOffsetCell(colIdx + 1, rowIdx + 1);
+    if (offsetCellNE !== null) {
+        highlightCell(offsetCellNE);
+        possibilityArr.push(offsetCellNE);
+        if (offsetCellNE.firstChild !== null && offsetCellNE.firstChild.classList.contains('rebels')) {
+                const jumpCellNE = getOffsetCell(colIdx - 2, rowIdx - 2);
+                if (jumpCellNE !== null) {
+                    highlightCell(jumpCellNE);
+                    possibilityArr.push(jumpCellNE);
+                }
+            }
+        }
+        if (offsetCellNW !== null) {
+            highlightCell(offsetCellNW);
+            possibilityArr.push(offsetCellNW);
+            if (offsetCellNW.firstChild !== null && offsetCellNW.firstChild.classList.contains('rebels')) {
+                const jumpCellNW = getOffsetCell(colIdx + 2, rowIdx - 2)
+                if (jumpCellNW !== null) {
+                    highlightCell(jumpCellNW);
+                    possibilityArr.push(jumpCellNW)
+                }
+            }
+        }
+        if (targetOld !== null && targetOld.classList.contains('vader')) {
+            if (offsetCellSE != null) {
+                highlightCell(offsetCellSE)
+                possibilityArr.push(offsetCellSE)
+            }
+            if (offsetCellSE.firstChild !== null && offsetCellSE.firstChild.classList.contains('rebels')) {
+                const jumpCellSE = getOffsetCell(colIdx - 2, rowIdx + 2);
+                if (jumpCellSE !== null) {
+                    highlightCell(jumpCellSE);
+                   possibilityArr.push(jumpCellSE)
+               }
+            }
+            if (offsetCellSW !== null) {
+                highlightCell(offsetCellSW)
+                possibilityArr.push(offsetCellSW)
+            }
+            if (offsetCellSW.firstChild !== null && offsetCellSW.firstChild.classList.contains('empire')) {
+                const jumpCellSW = getOffsetCell(colIdx + 2, rowIdx + 2);
+                if (jumpCellSW !== null) {
+                    highlightCell(jumpCellSW);
+                    possibilityArr.push(jumpCellSW)
+                }
+            }
+                }
+    return possibilityArr
+}
+
+const checkMove = (targetOld) => {
+    const cellId = getCellId(targetOld)
+    const colIdx = cellId[0]
+    const rowIdx = cellId[1]
+    if (PLAYER_LOOKUP[turn] === 'rebels') {
+       let possibilityArr = checkMovePossibilityRebels(targetOld, colIdx, rowIdx)
+       return possibilityArr
+       }
+       
+    else if (PLAYER_LOOKUP[turn] === 'empire') {
+       let possibilityArr = checkMovePossibilityEmpire(targetOld, colIdx, rowIdx)
        return possibilityArr
     }
 }
@@ -218,103 +185,70 @@ const changeToBlack = () => {
 }
 
 const jumpPlayer = (targetOld, targetNew) => {
-    let parentIdOld = targetOld.parentElement.id
-    let positionArrOld = parentIdOld.split('')
-    positionArrOld.shift()
-    positionArrOld.splice(1, 1)
-    let colIdxOld = positionArrOld[0]
-    let rowIdxOld = positionArrOld[1]
-    let parsedColIdxOld = parseInt(colIdxOld, 10) 
-    let parsedRowIdxOld = parseInt(rowIdxOld, 10)
-    
-    let parentIdNew = targetNew.id
-    let positionArrNew = parentIdNew.split('')
-    positionArrNew.shift()
-    positionArrNew.splice(1, 1)
-    let colIdxNew = positionArrNew[0]
-    let rowIdxNew = positionArrNew[1]
-    let parsedColIdxNew = parseInt(colIdxNew, 10) 
-    let parsedRowIdxNew = parseInt(rowIdxNew, 10)
+    console.log(targetNew)
+   const oldIdxArr = getCellId(targetOld)
+   const colIdxOld = oldIdxArr[0]
+   const rowIdxOld = oldIdxArr[1]
+   
+   const parentIdNew = targetNew.id
+   const positionArrNew = parentIdNew.split('')
+   positionArrNew.shift()
+   positionArrNew.splice(1, 1)
+   const unparsedColIdxNew = positionArrNew[0]
+   const unparsedRowIdxNew = positionArrNew[1]
+   const colIdxNew = parseInt(unparsedColIdxNew, 10) 
+   const rowIdxNew = parseInt(unparsedRowIdxNew, 10)
 
-  let rebelsTurnNEJumpedCellCol = parsedColIdxOld + 1
-  let rebelsTurnNEJumpedCellRow = parsedRowIdxOld + 1
-  let rebelsTurnNEJumpedCellIdx = `c${rebelsTurnNEJumpedCellCol}r${rebelsTurnNEJumpedCellRow}`
-  let rebelsTurnNEJumpedCellPosition = document.getElementById(rebelsTurnNEJumpedCellIdx)
+   let rebelsTurnNEJumpedCellPosition = getOffsetCell(colIdxOld + 1, rowIdxOld + 1);
+   let rebelsTurnNWJumpedCellPosition = getOffsetCell(colIdxOld - 1, rowIdxOld + 1);
+   let rebelsTurnSEJumpedCellPosition = getOffsetCell(colIdxOld + 1, rowIdxOld - 1);
+   let rebelsTurnSWJumpedCellPosition = getOffsetCell(colIdxOld - 1, rowIdxOld - 1);
 
-  let rebelsTurnSEJumpedCellCol = parsedColIdxOld + 1
-  let rebelsTurnSEJumpedCellRow = parsedRowIdxOld - 1
-  let rebelsTurnSEJumpedCellIdx = `c${rebelsTurnSEJumpedCellCol}r${rebelsTurnSEJumpedCellRow}`
-  let rebelsTurnSEJumpedCellPosition = document.getElementById(rebelsTurnSEJumpedCellIdx)
+  let empireTurnNEJumpedCellPosition = getOffsetCell(colIdxOld - 1, rowIdxOld - 1);
+  let empireTurnNWJumpedCellPosition = getOffsetCell(colIdxOld + 1, rowIdxOld - 1);
+  let empireTurnSEJumpedCellPosition = getOffsetCell(colIdxOld - 1, rowIdxOld + 1);
+  let empireTurnSWJumpedCellPosition = getOffsetCell(colIdxOld + 1, rowIdxOld + 1);
 
-  let rebelsTurnNWJumpedCellCol = parsedColIdxOld - 1
-  let rebelsTurnNWJumpedCellRow = parsedRowIdxOld + 1
-  let rebelsTurnNWJumpedCellIdx = `c${rebelsTurnNWJumpedCellCol}r${rebelsTurnNWJumpedCellRow}`
-  let rebelsTurnNWJumpedCellPosition = document.getElementById(rebelsTurnNWJumpedCellIdx)
-
-  let rebelsTurnSWJumpedCellCol = parsedColIdxOld - 1
-  let rebelsTurnSWJumpedCellRow = parsedRowIdxOld - 1
-  let rebelsTurnSWJumpedCellIdx = `c${rebelsTurnSWJumpedCellCol}r${rebelsTurnSWJumpedCellRow}`
-  let rebelsTurnSWJumpedCellPosition = document.getElementById(rebelsTurnSWJumpedCellIdx)
-
-  let empireTurnNEJumpedCellCol = parsedColIdxOld - 1
-  let empireTurnNEJumpedCellRow = parsedRowIdxOld - 1
-  let empireTurnNEJumpedCellIdx = `c${empireTurnNEJumpedCellCol}r${empireTurnNEJumpedCellRow}`
-  let empireTurnNEJumpedCellPosition = document.getElementById(empireTurnNEJumpedCellIdx)
-
-  let empireTurnSEJumpedCellCol = parsedColIdxOld - 1
-  let empireTurnSEJumpedCellRow = parsedRowIdxOld + 1
-  let empireTurnSEJumpedCellIdx = `c${empireTurnSEJumpedCellCol}r${empireTurnSEJumpedCellRow}`
-  let empireTurnSEJumpedCellPosition = document.getElementById(empireTurnSEJumpedCellIdx)
-
-  let empireTurnNWJumpedCellCol = parsedColIdxOld + 1
-  let empireTurnNWJumpedCellRow = parsedRowIdxOld - 1
-  let empireTurnNWJumpedCellIdx = `c${empireTurnNWJumpedCellCol}r${empireTurnNWJumpedCellRow}`
-  let empireTurnNWJumpedCellPosition = document.getElementById(empireTurnNWJumpedCellIdx)
-
-  let empireTurnSWJumpedCellCol = parsedColIdxOld + 1
-  let empireTurnSWJumpedCellRow = parsedRowIdxOld + 1
-  let empireTurnSWJumpedCellIdx = `c${empireTurnSWJumpedCellCol}r${empireTurnSWJumpedCellRow}`
-  let empireTurnSWJumpedCellPosition = document.getElementById(empireTurnSWJumpedCellIdx)
-  
   if (PLAYER_LOOKUP[turn]==='rebels') {
-    if (parsedColIdxNew === parsedColIdxOld + 2 && parsedRowIdxNew === parsedRowIdxOld + 2) {
+    if (colIdxNew === colIdxOld + 2 && rowIdxNew === rowIdxOld + 2) {
         rebelsTurnNEJumpedCellPosition.removeChild(rebelsTurnNEJumpedCellPosition.firstChild)
         return rebelsTurnNEJumpedCellPosition
-    } else if (parsedColIdxNew === parsedColIdxOld -2 && parsedRowIdxNew === parsedRowIdxOld + 2) {
+    } else if (colIdxNew === colIdxOld -2 && rowIdxNew === rowIdxOld + 2) {
         rebelsTurnNWJumpedCellPosition.removeChild(rebelsTurnNWJumpedCellPosition.firstChild)
         return rebelsTurnNWJumpedCellPosition
-    } else if (parsedColIdxNew === parsedColIdxOld + 2 && parsedRowIdxNew === parsedRowIdxOld - 2) {
+    } else if (colIdxNew === colIdxOld + 2 && rowIdxNew === rowIdxOld - 2) {
         rebelsTurnSEJumpedCellPosition.removeChild(rebelsTurnSEJumpedCellPosition.firstChild)
         return rebelsTurnSEJumpedCellPosition
-    } else if (parsedColIdxNew === parsedColIdxOld - 2 && parsedRowIdxNew === parsedRowIdxOld - 2) {
+    } else if (colIdxNew === colIdxOld - 2 && rowIdxNew === rowIdxOld - 2) {
         rebelsTurnSWJumpedCellPosition.removeChild(rebelsTurnSWJumpedCellPosition.firstChild)
         return rebelsTurnSWJumpedCellPosition
     }
   } else if (PLAYER_LOOKUP[turn]==='empire') {
-    if (parsedColIdxNew === parsedColIdxOld - 2 && parsedRowIdxNew === parsedRowIdxOld - 2) {
+    if (colIdxNew === colIdxOld - 2 && rowIdxNew === rowIdxOld - 2) {
         empireTurnNEJumpedCellPosition.removeChild(empireTurnNEJumpedCellPosition.firstChild)
         return empireTurnNEJumpedCellPosition
-    } else if (parsedColIdxNew === parsedColIdxOld + 2 && parsedRowIdxNew === parsedRowIdxOld - 2) {
+    } else if (colIdxNew === colIdxOld + 2 && rowIdxNew === rowIdxOld - 2) {
         empireTurnNWJumpedCellPosition.removeChild(empireTurnNWJumpedCellPosition.firstChild)
         return empireTurnNWJumpedCellPosition
-    } else if (parsedColIdxNew === parsedColIdxOld - 2 && parsedRowIdxNew === parsedRowIdxOld + 2) {
+    } else if (colIdxNew === colIdxOld - 2 && rowIdxNew === rowIdxOld + 2) {
         empireTurnSEJumpedCellPosition.removeChild(empireTurnSEJumpedCellPosition.firstChild)
         return empireTurnSEJumpedCellPosition
-    } else if (parsedColIdxNew === parsedColIdxOld + 2 && parsedRowIdxNew === parsedRowIdxOld + 2) {
+    } else if (colIdxNew === colIdxOld + 2 && rowIdxNew === rowIdxOld + 2) {
         empireTurnSWJumpedCellPosition.removeChild(empireTurnSWJumpedCellPosition.firstChild)
         return empireTurnSWJumpedCellPosition
     }
   }
 }
 
-let targetOld = null
+let targetOld = null;
+
 const handleMove = (event) => {
-    let targetNew = null
+    let targetNew = null;
     if(targetOld !== null) {
         if(!event.target.classList.contains('empire') || !event.target.classList.contains('rebels')) {
             if(event.target.classList.contains('black') && event.target.firstChild === null){
-                let possArr = checkMove(targetOld)
-                if (possArr.includes(event.target)) {
+                let possibilityArr = checkMove(targetOld)
+                if (possibilityArr.includes(event.target)) {
                     targetNew = event.target
                     jumpPlayer(targetOld, targetNew)
                     targetNew.appendChild(targetOld).style.borderColor = 'white'
@@ -331,20 +265,16 @@ const handleMove = (event) => {
         checkKing(targetOld)
         checkMove(targetOld)
         targetOld.style.borderColor = 'gold'
-        
     } 
     render()
-}
+};
 
 const getWinner = () => {
 	spacesArr = [...document.querySelectorAll('#board > div')]
 	const winnerArr = []
     
 	spacesArr.forEach((space) => {
-		if (
-			space?.childNodes[0]?.classList.contains('rebels')  ||
-			space?.childNodes[0]?.classList.contains('empire')
-		) {
+		if (space?.childNodes[0]?.classList.contains('rebels')  || space?.childNodes[0]?.classList.contains('empire')) {
 			winnerArr.push(space)
 		}
 	})
@@ -395,5 +325,3 @@ init()
 
 spaces.addEventListener('click', handleMove)
 forfeitBtn.addEventListener('click', forfeit)
-
-
